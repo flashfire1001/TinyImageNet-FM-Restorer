@@ -9,10 +9,7 @@
 ### data preprocessing
 
 corrupt 函数 - 生成有损失的图像.  pytorch 的 transform 就行 组合这两种:
-
-**不同程度的运动模糊或高斯模糊。**
-
-**随机矩形遮挡/擦除 (Random Erasing)：** 模拟图像中缺失的部分，这是非常常见的修复场景。
+F
 
 dataset 下载tiny imagenet -> customize for Resnet ->dataloader
 
