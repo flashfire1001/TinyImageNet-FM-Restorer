@@ -13,7 +13,7 @@ Primarily for educational and experimental purposes.
 git clone https://github.com/flashfire1001/TinyImageNet-FM-Restorer.git
 cd TinyImageNet-FM-Restorer
 pip install -r requirements.txt
-python train.py      # Train the model
+python train.py      # Train the models
 python sample.py     # Generate restored images
 ```
 
