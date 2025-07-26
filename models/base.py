@@ -16,3 +16,5 @@ class NNVelocity(nn.Module, ABC):
         - u_t^theta(x|y): (bs, c, h, w)
         """
         pass
+    
+    

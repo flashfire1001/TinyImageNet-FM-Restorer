@@ -39,7 +39,7 @@ path = GaussianConditionalPath(
 
 unet = UNetVelocity(
     init_channel = init_channel,
-    channels = [32, 64, 128],
+    channels = [64, 128, 256],
     num_residual_layers = 2,
     t_embed_dim = 64,
     y_embed_dim = 64,
