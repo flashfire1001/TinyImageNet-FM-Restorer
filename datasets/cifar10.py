@@ -37,4 +37,3 @@ def get_cifar10_dataloader(
         num_workers = num_workers,)
     
     return train_dataloader
-

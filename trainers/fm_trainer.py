@@ -13,8 +13,8 @@ class CFGTrainerFM(Trainer):
 
     def get_train_loss(self, data, device) -> torch.Tensor:
         z, y = data
-        z = z.to(device)
-        y = y.to(device)
+        z = z.to(device) #data
+        y = y.to(device) #labels
         # mask the image label with rate eta
         mask = torch.rand(z.shape[0]).to(device)
         y[mask < self.eta] = 10.0
@@ -25,5 +25,7 @@ class CFGTrainerFM(Trainer):
         u_t_ref = self.path.conditional_velocity(xt, z, t)      # shape(bs, c, h, w)
         u_t_theta = self.model(xt, t, y)                              # shape(bs, c, h, w)
 
-        error = torch.einsum("bchw -> b", torch.square(u_t_ref - u_t_theta))    # shape(bs, )
-        return torch.mean(error)
+        # error = torch.einsum("bchw -> b", torch.square(u_t_ref - u_t_theta))    # shape(bs, )
+        # return torch.mean(error)
+        error = torch.mean(torch.square(u_t_ref - u_t_theta),dim = 0).sum() #should be of shape()
+        return error

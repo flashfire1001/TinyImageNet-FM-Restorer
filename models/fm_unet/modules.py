@@ -64,6 +64,8 @@ class Decoder(nn.Module):
             nn.SiLU(),
             nn.Upsample(scale_factor=2, mode='bilinear'),
             nn.Conv2d(channels_in//2, channels_out, kernel_size=3, padding=1),
+            nn.BatchNorm2d(channels_out),
+            nn.SiLU()
         )      
         # here, given the concatenation of x_res and x, the number of channels doubles.
         # hence, the upsample need a extra conv + batchnorm to decrease the channels.

@@ -43,9 +43,9 @@ class Trainer(ABC):
 
         #trainer modules setup
         optimizer = self.get_optimizer(lr)
-        scheduler = self.get_scheduler(optimizer)
-        scaler = self.get_scaler()
-        clip_norm = self.get_grad_clip_norm()
+        # scheduler = self.get_scheduler(optimizer)
+        # scaler = self.get_scaler()
+        # clip_norm = self.get_grad_clip_norm()
 
         loss_history = []
         pbar = tqdm(enumerate(range(num_epochs)))
@@ -54,24 +54,32 @@ class Trainer(ABC):
         for index, epoch in pbar:
             for batch_idx, data in enumerate(dataloader):
                 optimizer.zero_grad()
-                with torch.amp.autocast(device_type=device.type):
-                    loss = self.get_train_loss(data=data, device=device)
+                # with torch.amp.autocast(device_type=device.type):
+                loss = self.get_train_loss(data=data, device=device)
+                loss.backward()
+                optimizer.step()
 
                 # Mixed precision backward + gradient clip
-                scaler.scale(loss).backward()
-                scaler.unscale_(optimizer)
-                nn.utils.clip_grad_norm_(self.model.parameters(), max_norm=clip_norm)
-                scaler.step(optimizer)
-                scaler.update()
+                # scaler.scale(loss).backward()
+                # scaler.unscale_(optimizer)
+                # nn.utils.clip_grad_norm_(self.model.parameters(), max_norm=clip_norm)
+                # scaler.step(optimizer)
+                # scaler.update()
 
-                scheduler.step(loss.item())  # default: ReduceLROnPlateau
+                # scheduler.step(loss.item())  # default: ReduceLROnPlateau
                 loss_history.append(loss.item())
                 pbar.set_description(f"Epoch {index} batch {batch_idx}, Loss: {loss.item():.4f}")
 
-        # train finish
+                #during the training process, save the checkpoints occasionally.
+            if epoch and epoch % 20 == 0:
+                save_checkpoint(self.model, optimizer, scheduler=None, scaler=None,
+                    epoch= epoch+1, batch_size=dataloader.batch_size, loss_history = None,
+                    project_name=project_name, filename=f"{project_name}_epoch{epoch}_bs{dataloader.batch_size}_model.pth")
+        
+        # train finish, start evaluation and generation task
         self.model.eval()
         draw_loss_curve(loss_history, num_epochs=num_epochs,
                         batch_size=dataloader.batch_size, project_name=project_name)
-        save_checkpoint(self.model, optimizer, scheduler, scaler,
-                        epoch=num_epochs, loss_history=loss_history,
-                        project_name=project_name, filename=f"{project_name}_model.pth")
+        save_checkpoint(self.model, optimizer, scheduler=None, scaler=None,
+                        epoch=num_epochs,batch_size=dataloader.batch_size, loss_history=loss_history,
+                        project_name=project_name, filename=f"{project_name}_final_model.pth", final = True)

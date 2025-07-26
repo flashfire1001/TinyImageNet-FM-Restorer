@@ -44,7 +44,7 @@ class UNetVelocity(NNVelocity):
         t_embed = self.time_embedder(t) # (bs, t_embed_dim)
         y_embed = self.y_embedder(y) # (bs, y_embed_dim)
         
-        x = self.init_conv(x) # (bs, c[1], h, w)
+        x = self.init_conv(x) # (bs, init_channel, h, w)
         
         for encoder in self.encoders:
             x = encoder(x, t_embed, y_embed) # (bs, c[i], h, w) -> (bs, c[i+1], h//2, w//2)

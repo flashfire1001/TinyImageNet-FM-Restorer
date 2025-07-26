@@ -7,10 +7,10 @@ from samplers import Sampler
 
 
 class ConditionalPath(nn.Module, ABC):
-    def __init__(self, noise:Sampler):
+    def __init__(self, noise:Sampler,init_channel:int = 3):
         super().__init__()
         self.noise = noise 
-        # the value of selected data/noise doesn't need to be shared with other class
+        self.init_channel = init_channel
         self.register_buffer("dummy", torch.tensor(0, ))
     
     @abstractmethod

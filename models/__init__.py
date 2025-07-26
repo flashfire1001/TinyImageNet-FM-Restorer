@@ -8,4 +8,3 @@ from .fm_unet import UNetVelocity
 from .base import NNVelocity
 
 __all__ = ["NNVelocity","UNetVelocity"]
-
