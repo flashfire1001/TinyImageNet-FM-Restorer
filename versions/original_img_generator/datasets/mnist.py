@@ -3,7 +3,7 @@
 from torchvision import datasets, transforms
 from torch.utils.data import DataLoader
 from typing import Tuple, Optional
-def get_cifar10_dataloader(
+def get_mnist_dataloader(
         root: str = "data/",
         batch_size: int = 128,
         num_workers: int = 4,
@@ -11,19 +11,18 @@ def get_cifar10_dataloader(
 ) -> DataLoader:
     
     """the function to get a dataloader"""
-    mean = [0.4914, 0.4822, 0.4465]
-    std  = [0.2023, 0.1994, 0.2010]
+    mean = (0.5)
+    std = (0.5)
 
     
     train_transform = transforms.Compose([
-        transforms.RandomHorizontalFlip(),
-        transforms.RandomCrop(32, padding=4),
-        transforms.ColorJitter(brightness=0.1, contrast=0.1, saturation=0.1),
-        transforms.ToTensor(),
-        transforms.Normalize(mean=mean, std=std)
-    ])
+            transforms.Resize((32, 32)),
+            transforms.RandomRotation(10),
+            transforms.ToTensor(),
+            transforms.Normalize(mean=mean, std=std)
+        ])
 
-    train_dataset = datasets.CIFAR10(
+    train_dataset = datasets.MNIST(
         root = root,
         train = True,
         download = download,
@@ -37,3 +36,4 @@ def get_cifar10_dataloader(
         num_workers = num_workers,)
     
     return train_dataloader
+#batch_size, c, H, W

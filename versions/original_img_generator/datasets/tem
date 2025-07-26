@@ -1,4 +1,4 @@
-# get the dataloader with a transformed dataset.
+but anyway I have wrote a dataloader that is in conflict with the new version of model: # get the dataloader with a transformed dataset.
 
 from torchvision import datasets, transforms
 from torch.utils.data import DataLoader
@@ -14,11 +14,12 @@ def get_cifar10_dataloader(
     mean = [0.4914, 0.4822, 0.4465]
     std  = [0.2023, 0.1994, 0.2010]
 
+
     
     train_transform = transforms.Compose([
         transforms.RandomHorizontalFlip(),
-        transforms.RandomCrop(32, padding=4),
-        transforms.ColorJitter(brightness=0.1, contrast=0.1, saturation=0.1),
+        #transforms.RandomCrop(32, padding=4),
+        transforms.ColorJitter(brightness=0.2, contrast=0.2, saturation=0.2),
         transforms.ToTensor(),
         transforms.Normalize(mean=mean, std=std)
     ])
@@ -36,4 +37,4 @@ def get_cifar10_dataloader(
         shuffle = True,
         num_workers = num_workers,)
     
-    return train_dataloader
+    return train_dataloader. I want:please no not change the size of image ( i want to the image in (32*32) size.
